@@ -1,0 +1,9 @@
+$ cat .gitignore
+
+.vs/
+bin/
+obj/
+Properties/
+*.csproj
+*.config
+*.sln
