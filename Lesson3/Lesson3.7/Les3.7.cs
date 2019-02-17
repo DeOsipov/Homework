@@ -10,7 +10,8 @@ namespace Les3._7
     {
         static void Main(string[] args)
         {
-            //крестики нолики
+            /* Написать игру крестики нолики для игры двумя игроками
+            Если будет очень скучно попробовать написать примитивного соперника
             // ?? enum or bool ??
             //create array of playing area -> info -> chose first turn/ next turn
 
@@ -20,10 +21,10 @@ namespace Les3._7
 
             //check array -> sum of 3 column, sum of 3 raw, sum of 2 diagonal
 
-        //create a playing area
-        int[,] playArea = new int[3, 3];
-        
-        for (int i = 0; i<3; i++)
+            //create a playing area
+            int[,] playArea = new int[3, 3];
+
+            for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
@@ -75,16 +76,16 @@ namespace Les3._7
              }*/
 
 
-           /* foreach (int sum in checkArray)
-            {
-                if (sum == 3)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }*/
-        }
+        /* foreach (int sum in checkArray)
+         {
+             if (sum == 3)
+             {
+                 return true;
+             }
+             else
+             {
+                 return false;
+             }
+         }*/
     }
+}

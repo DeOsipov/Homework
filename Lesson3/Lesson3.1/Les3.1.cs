@@ -37,5 +37,5 @@ namespace Lesson3._1
 
             return fibonacci(n - 2) + fibonacci(n - 1);
         }
-        }
     }
+}

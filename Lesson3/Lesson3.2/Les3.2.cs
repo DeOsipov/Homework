@@ -10,16 +10,41 @@ namespace Lesson3._2
     {
         static void Main(string[] args)
         {
-            /*Написать алгоритм поиска Nго простого числа(к примеру 2, 3, 5, 7 где 2 это 1ое число 3 - второе и т.д., т.е.если N = 4 то на выходе должно быть 7)
-            - Написать кальякулятор с множеством функций
-            -Написать методы расчёта площади: прямоугольнику, круга, треугольника ну и любой другой фигуры
-            -Найти среднефармфитическое значение массива
-            - Дан двуменый массив заполненный случайными числами, необходимо высчитать значение суммы по столбцам и по строчкам
+            /*Написать алгоритм поиска Nго простого числа(к примеру 2, 3, 5, 7
+            где 2 это 1ое число 3 - второе и т.д., т.е.если N = 4 то на выходе должно быть 7)*/
 
-            * Написать игру крестики нолики для игры двумя игроками
-            ** Если будет очень скучно попробовать написать примитивного соперника
+            Console.WriteLine("Please, input a position of prime number.");
+            int position = int.Parse(Console.ReadLine());
 
-            во всех задачах с массивами необходимо проинициализровать его случайными числами*/
+            int[] array = new int[position];
+
+            for (int i = 0; i < position; i++)
+            {
+                /*for (int j = 2; j * j <= position; j++)
+                {
+                    if (isPrime(j))
+                        array[i] = j;
+                    Console.WriteLine($"{j}");
+                }*/
+                array[i] = 2;
+                Console.WriteLine($"{i}");
+            }
+
+            Console.WriteLine($"Number is {array[position - 1]}.");
+            Console.ReadLine();
+        }
+
+        //checking is number prime
+        static bool isPrime(int n)
+        {
+            if (n == 1)
+                return false;
+            for (int i = 2; i*i <= n; i++)
+            {
+                if (n % i == 0)
+                    return false;
+            }
+            return true;
         }
     }
 }
