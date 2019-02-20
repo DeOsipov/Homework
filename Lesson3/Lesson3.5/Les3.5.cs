@@ -10,9 +10,6 @@ namespace Lesson3._5
     {
         static void Main(string[] args)
         {
-            /*--------------------------------------------------------------
-             * во всех задачах с массивами необходимо проинициализровать его случайными числами
-             ---------------------------------------------------------------*/
             //Найти среднефармфитическое значение массива
             //version1
             Console.WriteLine("Input length of array.");
@@ -56,29 +53,6 @@ namespace Lesson3._5
                 Console.WriteLine("U close the program.");
             }
            
-            Console.ReadLine();
-
-            //version2
-            Console.WriteLine("Input length of array.");
-            int arrLen = int.Parse(Console.ReadLine());
-            int[] arr = new int[arrLen];
-            for (int i = 0; i < arrLen; i++)
-            {
-                Random rnd = new Random();
-                arr[i] = rnd.Next(100);
-            }
-
-            double aver = 0;
-            foreach (int val in arr)
-            {
-                aver += val;
-            };
-
-            for (int i = 0; i < arrLen; i++)
-            {
-                Console.WriteLine($"Array {i} value is {arr[i]}.");
-            }
-            Console.WriteLine($"Average of array is {aver / arrLen}.");
             Console.ReadLine();
         }
     }
