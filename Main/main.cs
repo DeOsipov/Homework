@@ -8,46 +8,84 @@ namespace MainProject
 {
     class Program
     {
-        static void Main(string[] args)
+        enum Action
         {
-            Console.WriteLine("U r plaing the game \"Flower Lover v 0.1.0\".\n" +
+            Water,
+            Wait,
+            Take,
+            Exit,
+        }
+
+        static void userAction(out Action action)
+        {
+            string userInput = Console.ReadLine();
+            
+            switch (userInput)
+            {
+                case "1":
+                case "water":
+                    action = Action.Water;
+                    break;
+
+                case "2":
+                case "take":
+                    action = Action.Take;
+                    break;
+
+                case "3":
+                case "wait":
+                    action = Action.Wait;
+                    break;
+
+                case "4":
+                case "exit":
+                case "close":
+                    action = Action.Exit;
+                    break;
+
+                default:
+                    Console.WriteLine("Input correct action.");
+                    break;
+            }
+        }
+        static void Main()
+        {
+            Console.WriteLine("U r plaing the game \"Flower Lover v 0.4.0\".\n" +
                 "U can do 3 things:\n" +
-                "1st - water the plant (type \"water\");\n" +
-                "2nd - take the flower (type \"take\");\n" +
-                "3rd - skip a turn (type \"wait\");\n" +
-                "U can exit the game by typing \"exit\" or \"close\"\n" +
+                "1st - water the plant (type \"water\" or \"1\");\n" +
+                "2nd - take the flower (type \"take\" or \"2\");\n" +
+                "3rd - skip a turn (type \"wait\" or \"1\");\n" +
+                "U can exit the game by typing \"exit\" or \"close\" or \"4\"\n" +
                 "Your plant give a flower every three turns.\n" +
                 "If plant is staing dried more then 5 turns - it dies.\n" +
                 "Take as biggest bouquet.\n");
-            bool pour = false;
+            bool isPour = false;
             bool grow = false;
             int bouquet = 0;
             int flowerGrows = 0;
+
             int alive = 5;
-            string userInput = "";
-            string s = ".";
-            string only = "only ";
+            int fullHealth = 5;
+            int needWater = 2;
 
-            //-----base loop
-            while (userInput != "exit" && userInput != "close" && alive != 0)
+            int readyToTake = 3;
+
+            Action action = Action.Wait;
+            while (action != Action.Exit)
             {
-                //-----player turn
-                userInput = Console.ReadLine();
-                //evaporate the plant every 3rd turn
-                if (alive == 2)
-                {
-                    pour = false;
-                }
+                userAction(out action);
+                
+                if (alive == needWater)
+                    isPour = false;
 
-                switch (userInput)
+                switch (action)
                 {
-                    //-----water the plant
-                    case "water":
-                        if (pour == false)
+                    case Action.Water:
+                        if (isPour == false)
                         {
-                            pour = true;
+                            isPour = true;
                             flowerGrows++;
-                            alive = 5;
+                            alive = fullHealth;
                             Console.WriteLine($"U watered the plant.\n" +
                                 $"Plant will be dried after {alive} moves.\n" +
                                 $"Your flower is starting to grow\n" +
@@ -56,24 +94,22 @@ namespace MainProject
                         else
                         {
                             Console.WriteLine("U can\'t water more...");
-                            continue;
                         }
                         break;
-
-                    //-----take the flower
-                    case "take":
-                        if (grow = true && flowerGrows >= 3)
+                        
+                    case Action.Take:
+                        if (grow = true && flowerGrows >= readyToTake)
                         {
                             bouquet++;
                             grow = false;
                             flowerGrows = 0;
-                            if (pour == false)
+                            if (isPour == false)
                                 alive--;
                             Console.WriteLine($"U take the flower and increase a bouquet.\n" +
                                 $"Plant will be dried after {alive} moves.\n" +
                                 $"U have {bouquet} flower");
                         }
-                        else if (pour == true)
+                        else if (isPour == true)
                         {
                             Console.WriteLine("Your flower is not growning yet...");
                             continue;
@@ -83,14 +119,13 @@ namespace MainProject
                             Console.WriteLine("At first - water the plant and then wait some moves...");
                         };
                         break;
-
-                    //-----skip the turn
-                    case "wait":
+                        
+                    case Action.Wait:
                         flowerGrows++;
-                        if (pour == false)
+                        if (isPour == false)
                             alive--;
                         Console.WriteLine($"Plant will be dried after {alive} moves.\n");
-                        if (flowerGrows >= 3)
+                        if (flowerGrows >= readyToTake)
                         {
                             Console.WriteLine("U flower is ready");
                         }
@@ -100,27 +135,31 @@ namespace MainProject
                         }
                         break;
 
-                    //-----else
+                    case Action.Exit:
+                            break;
+
                     default:
                         Console.WriteLine("Input right action");
                         break;
                 }
             }
 
-            //-----dried = died
+            //----------game over
             if (alive == 0)
-            {
-                Console.WriteLine("YOU ARE DIED");
-            }
+                Console.WriteLine("YOU ARE DIED...");
 
-            //-----one or more flowers
+            if (action == Action.Exit)
+                Console.WriteLine("You closed the game.");
+
+            string s = ".";
+            string only = "only ";
+            
             if (bouquet != 1)
             {
                 s = "s.";
                 only = "";
             }
-
-            //-----end the game - view the score
+            
             Console.WriteLine($"U have taken {only}{bouquet} flower{s}");
             Console.ReadLine();
         }

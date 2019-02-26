@@ -32,7 +32,7 @@ namespace Les3._7
 
             bool isPlaying = true;
 
-            while (isPlaying && EmptyCells(area[endLine, endLine]))
+            while (isPlaying && EmptyCells(area))
             {
                 switch (userInput)
                 {
@@ -68,9 +68,11 @@ namespace Les3._7
                                 playerNumber = 1;
                             }
                         }
-                        if (!(EmptyCells(area[endLine, endLine]))
-                        isPlaying = false;
-                        break;
+                        if (!(EmptyCells(area[endLine, endLine])))
+                        {
+                            isPlaying = false;
+                            break;
+                        }
 
                     /*case "3":
                     while (isPlaying)
@@ -135,7 +137,7 @@ namespace Les3._7
                 }
             }
 
-            IsWinGame(arr[,]);
+            IsWinGame(arr);
         }
 
         //----AI simple turn
