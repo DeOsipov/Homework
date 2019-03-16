@@ -10,49 +10,29 @@ namespace Lesson4._1
 
     class Program
     {
-        static int level = 0;
 
         static void Main(string[] args)
         {
-            string path = @"C:\Program files";
+            string path = @"C:\Program Files";
 
-            string[] dir = Directory.GetDirectories(path);
+            Loop(path);
 
-            for (int position = 0; position < dir.Length || dir.Length == 0; position++)
-            {
-                if (dir.Length == 0)
-                {
-                    level--;
-                    if (level < 0)
-                        break;
-                }
-                else
-                {
-                    Console.WriteLine(dir[position]);
-                };
-
-                Loop(dir, position);
-                Console.Read();
-            }
+            Console.Read();
         }
 
-        static void Loop(string[] dir, int position)
+        static void Loop(string path)
         {
-            string[] subDir = Directory.GetDirectories(dir[position]);
+            string[] subDir = Directory.GetDirectories(path);
 
-            for (int i = 0; i < dir.Length || dir.Length == 0; i++)
+            if (subDir.Length != 0)
             {
-                if (subDir.Length == 0)
+                for (int i = 0; i < subDir.Length; i++)
                 {
-                    level--;
-                    if (level < 0)
-                        break;
-                }
-                else
-                {
+                    path = subDir[i];
                     Console.WriteLine(subDir[i]);
+                    Loop(path);
                 }
-            }
+            }            
         }
     }
 }
