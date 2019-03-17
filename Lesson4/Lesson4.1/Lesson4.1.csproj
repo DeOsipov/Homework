@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E9C00D3E-81F1-4F4B-A8D6-1667D10F158A}</ProjectGuid>
+    <ProjectGuid>{3C0537A9-F89F-44A7-B69E-25CCE9AEED98}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Lesson4._1</RootNamespace>
     <AssemblyName>Lesson4.1</AssemblyName>
@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Les4.1.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
