@@ -4,11 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-/*3. Сделать записную книжку, которая будет сохранять данные в файл.
-3* Каждая запись храниться в отдельном файле и при запуске программы, программа проверяет не пустая ли папка, и если нет то выводит
-    список доступных записей которые можно выбрать.
-3** Все данные хранятся в одном файле разбитые между собой и при запуске программы, программа считыает файл и выводит список
-    доступных записей.*/
+/*3. Сделать записную книжку, которая будет сохранять данные в файл.*/
 namespace Lesson4._3
 {
     class Program
@@ -21,7 +17,7 @@ namespace Lesson4._3
             Exit
         }
 
-        static void CreateFolder(out DirectoryInfo dirInfo)
+        void CreateFolder(out DirectoryInfo dirInfo)
         {
             string path = @"C:\Users\Gala\Desktop";
             dirInfo = new DirectoryInfo(path);
@@ -29,14 +25,14 @@ namespace Lesson4._3
             dirInfo.CreateSubdirectory(subPath);
         }
 
-        static void CreateInfoFile(out FileStream fileInfoStream)
+        void CreateInfoFile(out FileStream fileInfoStream)
         {
             string fileInfoPath = @"C:\Users\Gala\Desktop\notes\system.sys";
             fileInfoStream = new FileStream(fileInfoPath, FileMode.OpenOrCreate);
             File.SetAttributes(fileInfoStream.Name, FileAttributes.Hidden);
         }
 
-        static void Menu()
+        void Menu()
         {
             Console.WriteLine("\n" +
                         "Input a command:\n" +
@@ -45,14 +41,14 @@ namespace Lesson4._3
                         "3.Exit - to close a notepad.\n");
         }
 
-        static void UserAction(out FileAction fileAction)
+        FileAction fileAction = FileAction.Default;
+
+        void UserAction()
         {
             bool correctInput = false;
-            fileAction = FileAction.Default;
             while (fileAction != FileAction.Exit && !correctInput)
             {
                 Menu();
-
                 switch (Console.ReadLine())
                 {
                     case "1":
@@ -73,7 +69,7 @@ namespace Lesson4._3
             }
         }
 
-        static void FileWrite(string filePathCurrent)
+        void FileWrite(string filePathCurrent)
         {
             Console.WriteLine("Write your notes:");
             string userInput = Console.ReadLine();
@@ -84,7 +80,7 @@ namespace Lesson4._3
             }
         }
 
-        static void FileRead(string filePathCurrent)
+        void FileRead(string filePathCurrent)
         {
             using (FileStream fstream = File.OpenRead(filePathCurrent))
             {
@@ -95,17 +91,16 @@ namespace Lesson4._3
             }
         }
 
-        static void Main(string[] args)
+        void Main(string[] args)
         {
             CreateFolder(out DirectoryInfo dirInfo);
             CreateInfoFile(out FileStream fileInfoStream);
 
             string filePathCurrent = @"C:\Users\Gala\Desktop\notes\notes.txt";
-            FileAction fileAction = FileAction.Default;
 
             while (fileAction != FileAction.Exit)
             {
-                UserAction(out fileAction);
+                UserAction();
                 switch (fileAction)
                 {
                     case FileAction.Write:
