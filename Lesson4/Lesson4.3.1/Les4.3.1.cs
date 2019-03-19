@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 /*3. Сделать записную книжку, которая будет сохранять данные в файл.*/
-namespace Lesson4._3
+namespace Lesson4._3._1
 {
     class Program
     {
@@ -17,19 +17,12 @@ namespace Lesson4._3
             Exit
         }
 
-        void CreateFolder(out DirectoryInfo dirInfo)
+        void CreateFolder()
         {
             string path = @"C:\Users\Gala\Desktop";
             dirInfo = new DirectoryInfo(path);
             string subPath = @"notes";
             dirInfo.CreateSubdirectory(subPath);
-        }
-
-        void CreateInfoFile(out FileStream fileInfoStream)
-        {
-            string fileInfoPath = @"C:\Users\Gala\Desktop\notes\system.sys";
-            fileInfoStream = new FileStream(fileInfoPath, FileMode.OpenOrCreate);
-            File.SetAttributes(fileInfoStream.Name, FileAttributes.Hidden);
         }
 
         void Menu()
@@ -93,8 +86,7 @@ namespace Lesson4._3
 
         void Main(string[] args)
         {
-            CreateFolder(out DirectoryInfo dirInfo);
-            CreateInfoFile(out FileStream fileInfoStream);
+            CreateFolder();
 
             string filePathCurrent = @"C:\Users\Gala\Desktop\notes\notes.txt";
 
