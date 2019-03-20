@@ -15,7 +15,7 @@ namespace Lesson4._3._2
         static string InitFolder() // Change "path" to actual
         {
             string path = @"C:\Users\Gala\Desktop";
-            string subPath = @"notes";           
+            string subPath = @"notes";
             string folderPathCurrent = path + @"\" + subPath;
             Directory.CreateDirectory(folderPathCurrent);
             return folderPathCurrent;
@@ -61,28 +61,39 @@ namespace Lesson4._3._2
         {
             Console.WriteLine("Write your notes:");
             string userInput = Console.ReadLine();
-            
-            using (FileStream fstream = new FileStream(FileName(userInput), FileMode.OpenOrCreate))
+            try
             {
-                byte[] array = Encoding.Default.GetBytes(userInput);
-                fstream.Write(array, 0, array.Length);
+                using (FileStream fstream = new FileStream(FileName(userInput), FileMode.OpenOrCreate))
+                {
+                    byte[] array = Encoding.Default.GetBytes(userInput);
+                    fstream.Write(array, 0, array.Length);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Oooops... We missed your notes.");
             }
         }
 
-        //не создана обработка ошибки с недопустимыми символами в названии файла
-        //вариант с отдельным введением названия заметки - не интересно.
-        //И человек может даже в названии использовать недопустимые символы.
         static string FileName(string userInput)
         {
-            if(userInput.Length >= 10)
+            if (userInput.Length >= 10)
                 return folderPathCurrent + @"\" + userInput.Substring(0, 10) + "(...).txt";
             else
                 return folderPathCurrent + @"\" + userInput + "(...).txt";
         }
-        
-        static string[] FindAndShowNotes(string folderPath)
+
+        static string[] FindAndShowNotes(string folderPath, out bool folderIsEmpty)
         {
             string[] notes = Directory.GetFiles(folderPath, "*.txt");
+            folderIsEmpty = false;
+
+            if (notes.Length == 0)
+            {
+                Console.WriteLine("Folder is empty.");
+                folderIsEmpty = true;
+            }
+
             for (int i = 0; i < notes.Length; i++)
             {
                 FileInfo note = new FileInfo(notes[i]);
@@ -105,24 +116,29 @@ namespace Lesson4._3._2
                 {
                     fileName = notes[noteCurrent - 1];
                     correctInput = true;
-                }                    
+                }
             }
             return fileName;
         }
 
         static void FileRead()
         {
-            string filePathCurrent = ChooseNotes(FindAndShowNotes(folderPathCurrent));
+            string[] notes = FindAndShowNotes(folderPathCurrent, out bool folderIsEmpty);
 
-            using (FileStream fstream = File.OpenRead(filePathCurrent))
+            if (!folderIsEmpty)
             {
-                byte[] array = new byte[fstream.Length];
-                fstream.Read(array, 0, array.Length);
-                string textFromFile = Encoding.Default.GetString(array);
-                Console.WriteLine("Notes: {0}", textFromFile);
+                string filePathCurrent = ChooseNotes(notes);
+
+                using (FileStream fstream = File.OpenRead(filePathCurrent))
+                {
+                    byte[] array = new byte[fstream.Length];
+                    fstream.Read(array, 0, array.Length);
+                    string textFromFile = Encoding.Default.GetString(array);
+                    Console.WriteLine("Notes: {0}", textFromFile);
+                }
             }
         }
-        
+
         static void Main()
         {
             bool isExit = false;
