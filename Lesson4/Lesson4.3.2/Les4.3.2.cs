@@ -61,17 +61,23 @@ namespace Lesson4._3._2
         {
             Console.WriteLine("Write your notes:");
             string userInput = Console.ReadLine();
+
             try
             {
-                using (FileStream fstream = new FileStream(FileName(userInput), FileMode.OpenOrCreate))
-                {
-                    byte[] array = Encoding.Default.GetBytes(userInput);
-                    fstream.Write(array, 0, array.Length);
-                }
+                FileCreate(FileName(userInput), userInput);
             }
             catch
             {
-                Console.WriteLine("Oooops... We missed your notes.");
+                FileCreate(GenerateFileNameFromCreationTime(), userInput);
+            }
+        }
+
+        static void FileCreate(string fileName, string userInput)
+        {
+            using (FileStream fstream = new FileStream(fileName, FileMode.OpenOrCreate))
+            {
+                byte[] array = Encoding.Default.GetBytes(userInput);
+                fstream.Write(array, 0, array.Length);
             }
         }
 
@@ -79,8 +85,36 @@ namespace Lesson4._3._2
         {
             if (userInput.Length >= 10)
                 return folderPathCurrent + @"\" + userInput.Substring(0, 10) + "(...).txt";
-            else
+            else if (userInput.Length > 0)
                 return folderPathCurrent + @"\" + userInput + "(...).txt";
+            else
+            {
+                return GenerateFileNameFromCreationTime();
+            }
+        }
+
+        static string GenerateFileNameFromCreationTime()
+        {
+            DateTime generateTime = DateTime.Now;
+            return generateTime.ToString("yyyy/MM/dd HH:mm").Replace(":", "-");
+        }
+
+        static void FileRead()
+        {
+            string[] notes = FindAndShowNotes(folderPathCurrent, out bool folderIsEmpty);
+
+            if (!folderIsEmpty)
+            {
+                string filePathCurrent = ChooseNotes(notes);
+
+                using (FileStream fstream = File.OpenRead(filePathCurrent))
+                {
+                    byte[] array = new byte[fstream.Length];
+                    fstream.Read(array, 0, array.Length);
+                    string textFromFile = Encoding.Default.GetString(array);
+                    Console.WriteLine("Notes: {0}", textFromFile);
+                }
+            }
         }
 
         static string[] FindAndShowNotes(string folderPath, out bool folderIsEmpty)
@@ -119,24 +153,6 @@ namespace Lesson4._3._2
                 }
             }
             return fileName;
-        }
-
-        static void FileRead()
-        {
-            string[] notes = FindAndShowNotes(folderPathCurrent, out bool folderIsEmpty);
-
-            if (!folderIsEmpty)
-            {
-                string filePathCurrent = ChooseNotes(notes);
-
-                using (FileStream fstream = File.OpenRead(filePathCurrent))
-                {
-                    byte[] array = new byte[fstream.Length];
-                    fstream.Read(array, 0, array.Length);
-                    string textFromFile = Encoding.Default.GetString(array);
-                    Console.WriteLine("Notes: {0}", textFromFile);
-                }
-            }
         }
 
         static void Main()
