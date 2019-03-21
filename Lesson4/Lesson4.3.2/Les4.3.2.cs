@@ -10,15 +10,7 @@ namespace Lesson4._3._2
 {
     class Program
     {
-        static string folderPathCurrent = InitFolder();
-
-        static string InitFolder() // Change "path" to actual
-        {
-            string path = @"C:\Users\Gala\Desktop";
-            string folderPathCurrent = path + @"\notes";
-            Directory.CreateDirectory(folderPathCurrent);
-            return folderPathCurrent;
-        }
+        static string folderPathCurrent = Environment.CurrentDirectory;
 
         static void ShowMenu()
         {
