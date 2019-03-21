@@ -15,8 +15,7 @@ namespace Lesson4._3._2
         static string InitFolder() // Change "path" to actual
         {
             string path = @"C:\Users\Gala\Desktop";
-            string subPath = @"notes";
-            string folderPathCurrent = path + @"\" + subPath;
+            string folderPathCurrent = path + @"\notes";
             Directory.CreateDirectory(folderPathCurrent);
             return folderPathCurrent;
         }
@@ -87,16 +86,15 @@ namespace Lesson4._3._2
                 return folderPathCurrent + @"\" + userInput.Substring(0, 10) + "(...).txt";
             else if (userInput.Length > 0)
                 return folderPathCurrent + @"\" + userInput + "(...).txt";
-            else
-            {
+            else // == 0
                 return GenerateFileNameFromCreationTime();
-            }
         }
 
         static string GenerateFileNameFromCreationTime()
         {
             DateTime generateTime = DateTime.Now;
-            return generateTime.ToString("yyyy/MM/dd HH:mm").Replace(":", "-");
+            string generatedName = generateTime.ToString("yyyy/MM/dd HH:mm");
+            return folderPathCurrent + @"\" + generatedName.Replace(":", "-") + "(...).txt";
         }
 
         static void FileRead()
