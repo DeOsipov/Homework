@@ -8,9 +8,10 @@ namespace Lesson5
 {
     interface IAction
     {
-        void ShowMenu();
-        void ShowMessage();
-        void GetUserInput();
         User Login();
+        void ShowMenu();
+        void GetUserInput(out bool isExit);
+        bool RemoveSeal(Message message);
+        void ShowMessage(Message message);                        
     }
 }

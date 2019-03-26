@@ -8,16 +8,18 @@ namespace Lesson5
 {
     class Program
     {
-        static IAction show;// = new ConsolePresenter(); не дописан
-        static IMessageList messageList;// = new TestMessageList(); не дописан
+        static IAction action = new ConsoleAction();
+        static IMessageList;
+        //argue getmessagelist
 
         static void Main(string[] args)
         {
-            show.Login();
-            show.ShowMenu();
-            messageList.GetMessageList();
-            show.GetUserInput();
-            show.ShowMessage();
+            action.Login();//ok
+            //while(!isExit)
+            action.ShowMenu();//ok
+            result = action.GetUserInput(out bool isExit);//ok
+            //show abstract
+            //take enum of user input
         }
     }
 }

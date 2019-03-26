@@ -32,42 +32,24 @@ namespace Lesson5
             set { targetUserName = value; }
         }
 
+        public bool Read
+        {
+            get { return isRead; }
+            set { isRead = true; }
+        }
+
+        public bool Sealed
+        {
+            get { return isSealed; }
+            set { isSealed = false; }
+        }
+               
         public bool IsRightTarget(string targetName)
         {
             if (targetName == Target)
                 return true;
             else
                 return false;
-        }
-
-        public bool RemoveSeal()
-        {
-            Console.WriteLine("Remove seal? Y/N");
-            while (true)
-            {
-                string userInput = Console.ReadLine();
-
-                switch (userInput)
-                {
-                    case "Y":
-                        isSealed = false;
-                        return true;
-                    case "N":
-                        return false;
-                    default:
-                        Console.WriteLine("Uncorrect input.");
-                        break;
-                }
-            }
-        }
-
-        public void Read()
-        {
-            if (RemoveSeal())
-            {
-                Console.WriteLine(MessageMainText);
-                isRead = true;
-            }
         }
     }
 }

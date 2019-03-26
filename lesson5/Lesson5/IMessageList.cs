@@ -8,7 +8,7 @@ namespace Lesson5
 {    
     interface IMessageList
     {
-        void GetMessageList();
+        Message[] GetMessageList();
         //void GetMessageListToUser(); письма для определенного пользователя
     }
 }

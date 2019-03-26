@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestMessageList.cs" />
     <Compile Include="IMessageList.cs" />
+    <Compile Include="ConsoleAction.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="IPresenter.cs" />
+    <Compile Include="IAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
