@@ -41,6 +41,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson4.3.2", "..\Lesson4\L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson4.3.3", "..\Lesson4\Lesson4.3.3\Lesson4.3.3.csproj", "{496E5CE8-AB35-4F2F-9914-CB60AD43BF24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson5", "..\Lesson5\Lesson5\Lesson5.csproj", "{469D2046-03BE-4FB2-9D48-615B5003A5AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{45DE9C18-F80D-4535-B417-BACF6F6B656E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +115,14 @@ Global
 		{496E5CE8-AB35-4F2F-9914-CB60AD43BF24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{496E5CE8-AB35-4F2F-9914-CB60AD43BF24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{496E5CE8-AB35-4F2F-9914-CB60AD43BF24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{469D2046-03BE-4FB2-9D48-615B5003A5AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{469D2046-03BE-4FB2-9D48-615B5003A5AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{469D2046-03BE-4FB2-9D48-615B5003A5AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{469D2046-03BE-4FB2-9D48-615B5003A5AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45DE9C18-F80D-4535-B417-BACF6F6B656E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45DE9C18-F80D-4535-B417-BACF6F6B656E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45DE9C18-F80D-4535-B417-BACF6F6B656E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45DE9C18-F80D-4535-B417-BACF6F6B656E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
