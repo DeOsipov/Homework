@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lesson5
 {
-    class ConsoleAction : IAction//для ввода-вывода информации через консоль
+    class ConsoleAction : IAction
     {
         public User Login()
         {
@@ -18,47 +18,33 @@ namespace Lesson5
 
         public void ShowMenu()
         {
-            Console.WriteLine("Input a number of action" +
-                "1.Show all messages." +
-                "2.Pick a messages." +
-                "3.Remove seal." +
-                "4.Show message" +
-                "5.Exit.");
+            Console.WriteLine("\nInput a number of action.\n" +
+                "1.Show all messages.\n" +
+                "2.Pick a messages.\n" +
+                "3.Remove seal.\n" +
+                "4.Show message.\n" +
+                "5.Exit.\n");
         }
 
-        static IMessageList messageList = new TestMessageList();
-        static Message[] actualMessageList = messageList.GetMessageList();
-
-        public void GetUserInput(out bool isExit)
+        public UserAction GetUserInput()
         {
-            isExit = false;
-            bool correctInput = false;
-
-            while (!correctInput)
+            while (true)
             {                
                 string userInput = Console.ReadLine();
-
                 switch (userInput)
                 {
                     case "1":
-                        ShowMessageList(actualMessageList);
-                        correctInput = true;
-                        break;
+                        return UserAction.MessageList;
                     case "2":
-                        Pick(actualMessageList);
-                        correctInput = true;
-                        break;
+                        return UserAction.PickMessage;
                     case "3":
-                        RemoveSeal(Pick(actualMessageList));//exeption when messages have not been chosen
-                        correctInput = true;
-                        break;
+                        return UserAction.RemoveSeal;
                     case "4":
-                        ShowMessage(Pick(actualMessageList));
-                        correctInput = true;
-                        break;
+                        return UserAction.ShowMessage;
                     case "5":
-                        isExit = true;
-                        correctInput = true;
+                        return UserAction.Exit;
+                    default:
+                        WrongInput();
                         break;
                 }
             }
@@ -95,29 +81,37 @@ namespace Lesson5
                     }
                 }
                 else
-                    Console.WriteLine("Input correct number.");
+                    WrongInput();
             }
             return mes;            
         }
 
-        public bool RemoveSeal(Message message)
+        public bool RemoveSeal(Message message, string targetName)
         {
-            Console.WriteLine("Remove seal? Y/N");
-            while (true)
+            if (message.IsRightTarget(targetName))
             {
-                string userInput = Console.ReadLine();
-
-                switch (userInput)
+                Console.WriteLine("Remove seal? Y/N");
+                while (true)
                 {
-                    case "Y":
-                        message.Sealed = false;
-                        return true;
-                    case "N":
-                        return false;
-                    default:
-                        Console.WriteLine("Uncorrect input.");
-                        break;
+                    string userInput = Console.ReadLine();
+
+                    switch (userInput)
+                    {
+                        case "Y":
+                            message.Sealed = false;
+                            return true;
+                        case "N":
+                            return false;
+                        default:
+                            WrongInput();
+                            break;
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine("It's not your message");
+                return false;
             }
         }
 
@@ -125,11 +119,18 @@ namespace Lesson5
         {
             if (!message.Sealed)
             {
+                Console.WriteLine(message.MessageName);
+                Console.WriteLine(message.Target);
                 Console.WriteLine(message.MessageMainText);
                 message.Read = true;
             }
             else
                 Console.WriteLine("Message is sealed, at first open it.");
-        }        
+        }
+
+        public void WrongInput()
+        {
+            Console.WriteLine("Wrong input");
+        }
     }
 }

@@ -10,8 +10,11 @@ namespace Lesson5
     {
         User Login();
         void ShowMenu();
-        void GetUserInput(out bool isExit);
-        bool RemoveSeal(Message message);
-        void ShowMessage(Message message);                        
+        UserAction GetUserInput();
+        void ShowMessageList(Message[] messages);
+        Message Pick(Message[] messages);
+        bool RemoveSeal(Message message, string targetName);
+        void ShowMessage(Message message);
+        void WrongInput();
     }
 }
