@@ -9,10 +9,10 @@ namespace Main
     class Plant
     {
         internal int lifeBar = 5;
-        internal int fullHealth = 5;
-        internal int needWater = 2;
+        internal const int fullHealth = 5;
+        internal const int needWater = 2;
 
-        internal int CounterToGrew = 0;
+        internal int counterToGrew = 0;
         internal int readyToTake = 3;
 
         internal bool isPour = false;

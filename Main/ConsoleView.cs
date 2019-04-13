@@ -6,19 +6,37 @@ using System.Threading.Tasks;
 
 namespace Main
 {
-    class ConsoleView : IView
+    enum UserAction
     {
-        public void Login(User user)
+        Default,
+        Take,
+        Water,
+        Wait,
+        Exit
+    }
+
+    enum PlantNumber
+    {
+        Default,
+        First,
+        Second,
+        Third,
+        Exit
+    }
+
+    class ConsoleView : AView
+    {
+        public override void Login(User user)
         {
             user.name = UserInput();
         }
 
-        public string UserInput()
+        public override string UserInput()
         {
             return Console.ReadLine();
         }
 
-        public void ShowMenu()
+        public override void ShowMenu()
         {
             Console.WriteLine("U r plaing the game \"Flower Lover v 0.4.0\".\n" +
                 "U can do 3 things:\n" +
@@ -31,28 +49,19 @@ namespace Main
                 "Take as biggest bouquet.\n");
         }
 
-        public void ShowScore(User user)
+        public override void ShowScore(User user)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"U have {user.score} flower.");
             Console.ResetColor();
-        }
+        }        
 
-        enum UserAction
-        {
-            Default,
-            Take,
-            Water,
-            Wait,
-            Exit
-        }
-
-        public void GetUserAction(Plant plant, User user)
+        public override void GetUserAction(Plant plant, User user)
         {
             bool isExit = false;
             while (isExit == false)
             {
-                switch (view.UserInput())
+                switch (UserInput())
                 {
                     case "1":
                         Water(plant, user);
@@ -68,71 +77,60 @@ namespace Main
                         isExit = true;
                         break;
                     default:
-                        view.AlertNotCorrectInput();
+                        Alert(notCorrectInput);
                         break;
                 }
             }
         }
 
-        public void Water(Plant plant)
+        public override void Water(Plant plant)
         {
             Console.WriteLine($"U watered the plant.\n" +
                 $"Plant will be dried after {plant.lifeBar} moves.\n" +
                 $"Your flower is starting to grow\n");
+        }        
+
+        public override void TakeFlower(Plant plant)
+        {
+            Console.WriteLine($"U take the flower and increase a bouquet.\n" +
+                $"Plant will be dried after {plant.lifeBar} moves.\n");
         }
 
-        string wateredNo = "U can\'t water more...";
-        string notGrowing = "Your flower is not growning yet...";
-        string notWatered = "At first - water the plant and then wait some moves...";
-        string notCorrectInput = "Input right action";
+        public override void Wait(Plant plant)
+        {
+            Console.WriteLine($"Plant will be dried after {plant.lifeBar} moves.\n");
+        }
 
-        public void Alert(string message)
+        public override void Ready()
+        {
+            Console.WriteLine("Your flower is ready");
+        }
+
+        public override void NotGrowYet(Plant plant)
+        {
+            Console.WriteLine($"Your flower will grow after {plant.readyToTake - plant.counterToGrew} moves.");
+        }
+
+        public override void Alert(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ResetColor();
-        }
+        }        
 
-        string wateredYes = "Plant have been watered.";
-
-        public void Confirm(string message)
+        public override void Success(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(message);
             Console.ResetColor();
         }
 
-        public void TakeFlower(Plant plant)
-        {
-            Console.WriteLine($"U take the flower and increase a bouquet.\n" +
-                $"Plant will be dried after {plant.lifeBar} moves.\n");
-        }
-
-        public void Wait(Plant plant, out bool isExit) // change logic
-        {
-            isExit = false;
-            plant.CounterToGrew++;
-            if (plant.isPour == false)
-            {
-                plant.lifeBar--;
-                Console.WriteLine($"Plant will be dried after {plant.lifeBar} moves.\n");
-            }
-
-            if (plant.CounterToGrew >= plant.readyToTake)
-                Console.WriteLine("Ur flower is ready");
-            else
-                Console.WriteLine($"Your flower will grow after {plant.CounterToGrew} moves.");
-
-            if (plant.lifeBar == 0)
-                isExit = true;
-        }
-
-        public void Died()
+        public override void Died()
         {
             Console.WriteLine("YOU ARE DIED...");
         }
 
-        public void Closed()
+        public override void Closed()
         {
             Console.WriteLine("You closed the game.");
         }

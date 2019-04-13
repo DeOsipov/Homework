@@ -8,7 +8,7 @@ namespace Main
 {
     class Control
     {
-        IView view = new ConsoleView();
+        AView view = new ConsoleView();
         
         public void ChooseUserAction(Plant plant, User user)
         {
@@ -31,33 +31,33 @@ namespace Main
                         isExit = true;
                         break;
                     default:
-                        view.AlertNotCorrectInput();
+                        view.Alert(notCorrectInput);
                         break;
                 }
             }
         }
 
-        public void Water(Plant plant, User user)
+        public void Water(Plant plant, User user)//err
         {
             if (plant.isPour == false)
             {
                 plant.isPour = true;
-                plant.CounterToGrew++;
+                plant.counterToGrew++;
                 plant.lifeBar = plant.fullHealth;
                 view.Water(plant);
-                view.showScore();
+                view.ShowScore(user);
             }
             else
-                view.AlertWater();
+                view.Alert(view.waterNo);
         }
 
-        public void TakeFlower(Plant plant, User user)
+        public void TakeFlower(Plant plant, User user)//err
         {
-            if (plant.grow = true && plant.CounterToGrew >= plant.readyToTake)
+            if (plant.grow = true && plant.counterToGrew >= plant.readyToTake)
             {
                 user.score++;
                 plant.grow = false;
-                plant.CounterToGrew = 0;
+                plant.counterToGrew = 0;
 
                 if (plant.isPour == false)
                     plant.lifeBar--;
@@ -70,12 +70,31 @@ namespace Main
                 view.Alert(view.notWatered);
         }
 
-        void Pour(Plant plant)
+        public void Wait(Plant plant, out bool isExit) // change logic
+        {
+            isExit = false;
+            plant.counterToGrew++;
+            if (plant.isPour == false)
+            {
+                plant.lifeBar--;
+                Console.WriteLine($"Plant will be dried after {plant.lifeBar} moves.\n");
+            }
+
+            if (plant.counterToGrew >= plant.readyToTake)
+                Console.WriteLine("Your flower is ready");
+            else
+                Console.WriteLine($"Your flower will grow after {plant.readyToTake - plant.counterToGrew} moves.");
+
+            if (plant.lifeBar == 0)
+                isExit = true;
+        }
+
+        void Pour(Plant plant)//err
         {
             if (plant.isPour == false)
                 plant.isPour = true;
             else
-                view.Confirm(view.wateredYes);
+                view.Success(view.wateredYes);
         }
 
         public void EndGame(Plant plant, User user)

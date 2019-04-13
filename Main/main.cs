@@ -8,25 +8,32 @@ namespace Main
 {
     class Program
     {        
-        static IView view = new ConsoleView();
+        static AView view = new ConsoleView();
         static User user = new User();
         static Control control = new Control();
         static Plant plantFirst = new Plant();
         static Plant plantSecond = new Plant();
         static Plant plantThird = new Plant();
 
-        static Plant ChoosePlant(string UserInput)
+        static Plant actualPlant = new Plant();
+
+        static void ChoosePlant(string UserInput)
         {
             switch (UserInput)
             {
                 case "1":
-                    return plantFirst;
+                    actualPlant = plantFirst;
+                    break;
                 case "2":
-                    return plantSecond;
+                    actualPlant = plantFirst;
+                    break;
                 case "3":
-                    return plantThird;
-            }
-            return view.Alert(view.notCorrectInput);
+                    actualPlant = plantFirst;
+                    break;
+                default:
+                    view.Alert(view.notCorrectInput);
+                    break;
+            }            
         }
 
         static void Main()
@@ -37,7 +44,7 @@ namespace Main
             view.Login(user);
             view.GetUserAction(actualPlant, user);
             view.ShowMenu();
-            view.EndGame(actualPlant, user);
+            control.EndGame(actualPlant, user);
         }
     }
 }
