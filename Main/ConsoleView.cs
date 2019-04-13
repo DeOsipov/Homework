@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace Main
 {
-    class ConsoleRepresent : IRepresent
+    class ConsoleView : IView
     {
+        public void Login(User user)
+        {
+            user.name = UserInput();
+        }
+
         public string UserInput()
         {
             return Console.ReadLine();
-        }//ok
+        }
 
         public void ShowMenu()
         {
@@ -24,21 +29,30 @@ namespace Main
                 "Your plant give a flower every three turns.\n" +
                 "If plant is staing dried more then 5 turns - it dies.\n" +
                 "Take as biggest bouquet.\n");
-        }//ok
+        }
 
         public void ShowScore(User user)
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"U have {user.score} flower.");
-        }//ok
+            Console.ResetColor();
+        }
 
-        public void UserAction(Plant plant, User user)
+        enum UserAction
+        {
+            Default,
+            Take,
+            Water,
+            Wait,
+            Exit
+        }
+
+        public void GetUserAction(Plant plant, User user)
         {
             bool isExit = false;
-            while (!isExit)
+            while (isExit == false)
             {
-                string userInput = Console.ReadLine();
-
-                switch (userInput)
+                switch (view.UserInput())
                 {
                     case "1":
                         Water(plant, user);
@@ -54,46 +68,44 @@ namespace Main
                         isExit = true;
                         break;
                     default:
-                        AlertNotCorrectInput();
+                        view.AlertNotCorrectInput();
                         break;
                 }
             }
         }
 
-        public void Water(Plant plant, User user)
+        public void Water(Plant plant)
         {
-            if (plant.isPour == false)
-            {
-                plant.isPour = true;
-                plant.CounterToGrew++;
-                plant.lifeBar = plant.fullHealth;
-                Console.WriteLine($"U watered the plant.\n" +
-                    $"Plant will be dried after {plant.lifeBar} moves.\n" +
-                    $"Your flower is starting to grow\n");
-                ShowScore(user);
-            }
-            else
-                Console.WriteLine("U can\'t water more...");
+            Console.WriteLine($"U watered the plant.\n" +
+                $"Plant will be dried after {plant.lifeBar} moves.\n" +
+                $"Your flower is starting to grow\n");
         }
 
-        public void TakeFlower(Plant plant, User user)//ok
-        {
-            if (plant.grow = true && plant.CounterToGrew >= plant.readyToTake)
-            {
-                user.score++;
-                plant.grow = false;
-                plant.CounterToGrew = 0;
+        string wateredNo = "U can\'t water more...";
+        string notGrowing = "Your flower is not growning yet...";
+        string notWatered = "At first - water the plant and then wait some moves...";
+        string notCorrectInput = "Input right action";
 
-                if (plant.isPour == false)
-                    plant.lifeBar--;
-                Console.WriteLine($"U take the flower and increase a bouquet.\n" +
-                    $"Plant will be dried after {plant.lifeBar} moves.\n");
-                ShowScore(user);
-            }
-            else if (plant.isPour == true)
-                Console.WriteLine("Your flower is not growning yet...");
-            else
-                Console.WriteLine("At first - water the plant and then wait some moves...");
+        public void Alert(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        string wateredYes = "Plant have been watered.";
+
+        public void Confirm(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        public void TakeFlower(Plant plant)
+        {
+            Console.WriteLine($"U take the flower and increase a bouquet.\n" +
+                $"Plant will be dried after {plant.lifeBar} moves.\n");
         }
 
         public void Wait(Plant plant, out bool isExit) // change logic
@@ -115,18 +127,14 @@ namespace Main
                 isExit = true;
         }
 
-        public void AlertNotCorrectInput()
+        public void Died()
         {
-            Console.WriteLine("Input right action");
-        }//ok
-        
-        public void EndGame(Plant plant, User user)
+            Console.WriteLine("YOU ARE DIED...");
+        }
+
+        public void Closed()
         {
-            if (plant.lifeBar == 0)
-                Console.WriteLine("YOU ARE DIED...");
-            else
-                Console.WriteLine("You closed the game.");
-            ShowScore(user);
-        }//ok
+            Console.WriteLine("You closed the game.");
+        }
     }
 }

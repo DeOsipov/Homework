@@ -10,10 +10,5 @@ namespace Main
     {
         internal string name;
         internal int score;
-
-        internal void Login(IRepresent represent)
-        {
-            name = represent.UserInput();
-        }
     }
 }
