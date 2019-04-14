@@ -1,43 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Main
+﻿namespace Main
 {
     class Control
     {
-        AView view = new ConsoleView();
-        
-        public void ChooseUserAction(Plant plant, User user)
+        static IView view = new ConsoleView();
+        static ConsoleViewText viewText = new ConsoleViewText();
+
+        static void Main()
         {
-            bool isExit = false;
-            while (isExit == false)
+            User user = new User();
+            view.Login(user);
+
+            Plant[] plants = Plants();
+            bool isExit = false;            
+
+            while (!EverybodyDies(plants) && isExit != true)
             {
-                switch (view.UserInput())
+                view.ShowStartMenu(user);
+                ChooseUserAction(plants, user, out isExit);
+            }
+            EndGame(plants, user);
+        }
+        
+        private static int numberOfPlants = 3;
+        static Plant[] Plants()
+        {
+            Plant[] plants = new Plant[numberOfPlants];
+            for (int i = 0; i < plants.Length; i++)
+            {
+                plants[i] = new Plant{ number = i+1 };
+            }
+            return plants;
+        }
+
+        static void ChooseUserAction(Plant[] plants, User user, out bool isExit)
+        {
+            isExit = false;
+            UserAction action = UserAction.Default;
+
+            while (isExit != true)
+            {
+                view.ShowMenu();
+                switch (view.GetUserAction())
                 {
-                    case "1":
-                        Water(plant, user);
+                    case UserAction.Water:
+                        Water(ChoosePlant(plants));
                         break;
-                    case "2":
-                        TakeFlower(plant, user);
+                    case UserAction.Take:
+                        TakeFlower(ChoosePlant(plants), user);
                         break;
-                    case "3":
-                        Wait(plant, out isExit);
+                    case UserAction.Wait:
+                        isExit = Wait(plants);
                         break;
-                    case "4":
-                        EndGame(plant, user);
+                    case UserAction.Exit:
                         isExit = true;
                         break;
                     default:
-                        view.Alert(notCorrectInput);
+                        view.Alert(viewText.notCorrectInput);
                         break;
                 }
+                view.ShowScore(user);
             }
         }
+        
+        static public Plant ChoosePlant(Plant[] plants)
+        {
+            view.ChoosePlant();
+            bool success = int.TryParse(view.UserInput(), out int number);
+            if (success && number > 0 && number <= plants.Length)
+                return plants[number - 1];
+            return null;
+        }
 
-        public void Water(Plant plant, User user)//err
+        static public void Water(Plant plant)
         {
             if (plant.isPour == false)
             {
@@ -45,65 +79,82 @@ namespace Main
                 plant.counterToGrew++;
                 plant.lifeBar = plant.fullHealth;
                 view.Water(plant);
-                view.ShowScore(user);
             }
             else
-                view.Alert(view.waterNo);
+                view.Alert(viewText.waterNo);
         }
-
-        public void TakeFlower(Plant plant, User user)//err
+        
+        static public void TakeFlower(Plant plant, User user)
         {
-            if (plant.grow = true && plant.counterToGrew >= plant.readyToTake)
+            if (plant.isPour = true && plant.counterToGrew >= plant.readyToTake)
             {
                 user.score++;
-                plant.grow = false;
                 plant.counterToGrew = 0;
+                view.TakeFlower(plant);
+            }
+            else if (plant.isPour == false)
+                view.Alert(viewText.notWatered);
+            else
+                view.Alert(viewText.notGrowing);
+        }        
+
+        static public bool Wait(Plant[] plants)
+        {
+            foreach (Plant plant in plants)
+            {
+                if (plant.lifeBar == 0)
+                    plant.isDead = true; //TODO if plant is dead - exclude it from the game and show alert
+
+                if (plant.isPour == true)
+                {
+                    plant.counterToGrew++;
+                    if (plant.counterToGrew >= plant.readyToTake)
+                        view.Ready(plant);
+                    else
+                        view.NotGrowYet(plant);
+                }
 
                 if (plant.isPour == false)
+                {
+                    plant.counterToGrew = 0;
                     plant.lifeBar--;
-                view.TakeFlower(plant);
-                view.ShowScore(user);
-            }
-            else if (plant.isPour == true)
-                view.Alert(view.notGrowning);
-            else
-                view.Alert(view.notWatered);
-        }
-
-        public void Wait(Plant plant, out bool isExit) // change logic
-        {
-            isExit = false;
-            plant.counterToGrew++;
-            if (plant.isPour == false)
-            {
-                plant.lifeBar--;
-                Console.WriteLine($"Plant will be dried after {plant.lifeBar} moves.\n");
+                    view.WillDried(plant);
+                }
             }
 
-            if (plant.counterToGrew >= plant.readyToTake)
-                Console.WriteLine("Your flower is ready");
+            if (EverybodyDies(plants))
+                return true;
             else
-                Console.WriteLine($"Your flower will grow after {plant.readyToTake - plant.counterToGrew} moves.");
-
-            if (plant.lifeBar == 0)
-                isExit = true;
+                return false;
         }
 
-        void Pour(Plant plant)//err
+        static void Pour(Plant plant)
         {
             if (plant.isPour == false)
                 plant.isPour = true;
             else
-                view.Success(view.wateredYes);
+                view.Success(viewText.wateredYes);
         }
 
-        public void EndGame(Plant plant, User user)
+        static public void EndGame(Plant[] plants, User user)
         {
-            if (plant.lifeBar == 0)
+            if (EverybodyDies(plants))
                 view.Died();
             else
                 view.Closed();
             view.ShowScore(user);
+        }
+
+        static bool EverybodyDies(Plant[] plants)
+        {
+            int counter = 0;
+            foreach (var plant in plants)
+            {
+                counter += plant.lifeBar;
+                if (counter != 0)
+                    return false;
+            }
+            return true;
         }
     }
 }

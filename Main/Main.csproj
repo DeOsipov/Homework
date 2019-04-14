@@ -44,11 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleView.cs" />
-    <Compile Include="Control.cs" />
+    <Compile Include="EnumList.cs" />
     <Compile Include="Plant.cs" />
-    <Compile Include="AView.cs" />
-    <Compile Include="main.cs" />
+    <Compile Include="IView.cs" />
+    <Compile Include="Control.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConsoleViewText.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
