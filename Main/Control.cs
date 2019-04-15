@@ -50,8 +50,9 @@
                         TakeFlower(ChoosePlant(plants), user);
                         break;
                     case UserAction.Wait:
-                        if (Wait(plants))
-                            action = UserAction.Exit;
+                        Wait(plants);
+                        if (IsEverybodyDead(plants))
+                            action = UserAction.Exit;                        
                         break;
                     case UserAction.ShowStatus:
                         ShowStatus(plants);
@@ -110,12 +111,24 @@
                 view.Alert(viewText.notGrowing);
         }        
 
-        static public bool Wait(Plant[] plants)
-        {
+        static public void Wait(Plant[] plants) //TODO if plant is dead - exclude it from the game and show alert
+        {                                       //make smaler methods
             foreach (Plant plant in plants)
             {
-                if (plant.lifeBar == 0)
-                    plant.isDead = true; //TODO if plant is dead - exclude it from the game and show alert
+                if (plant.isDead)
+                {
+                    view.Alert(viewText.isDead);
+                    continue;
+                }
+
+                plant.lifeBar--;
+                if (plant.lifeBar <= 0)
+                {
+                    plant.isDead = true;
+                    continue;
+                }
+                else if (plant.lifeBar <= 2)
+                    plant.isPour = false;
 
                 if (plant.isPour == true)
                 {
@@ -125,19 +138,12 @@
                     else
                         view.NotGrowYet(plant);
                 }
-
-                if (plant.isPour == false)
+                else
                 {
                     plant.counterToGrew = 0;
-                    plant.lifeBar--;
-                    view.WillDried(plant);
+                    view.WillDried(plant);                    
                 }
             }
-
-            if (isEverybodyDead(plants))
-                return true;
-            else
-                return false;
         }
 
         static void Pour(Plant plant)
@@ -150,13 +156,13 @@
 
         static public void EndGame(Plant[] plants, User user)
         {
-            if (isEverybodyDead(plants))
+            if (IsEverybodyDead(plants))
                 view.Died();
             else
                 view.Closed();
         }
 
-        static bool isEverybodyDead(Plant[] plants)
+        static bool IsEverybodyDead(Plant[] plants)
         {
             int counter = 0;
             foreach (var plant in plants)
