@@ -3,25 +3,28 @@
     class Control
     {
         static IView view = new ConsoleView();
-        static ConsoleViewText viewText = new ConsoleViewText();
+        static ViewText viewText = new ViewText();
 
         static void Main()
         {
-            User user = new User();
-            view.Login(user);
-
+            User user = Login();
             Plant[] plants = Plants();
-            bool isExit = false;            
 
-            while (!EverybodyDies(plants) && isExit != true)
-            {
-                view.ShowStartMenu(user);
-                ChooseUserAction(plants, user, out isExit);
-            }
+            view.ShowStartMenu(user);
+            ChooseUserAction(plants, user);
             EndGame(plants, user);
+            view.UserInput();//чтоб не закрывалась
         }
-        
-        private static int numberOfPlants = 3;
+
+        static User Login()
+        {
+            User user = new User();
+            view.Login();
+            user.name = view.UserInput();
+            return user;
+        }
+
+        private const int numberOfPlants = 3;
         static Plant[] Plants()
         {
             Plant[] plants = new Plant[numberOfPlants];
@@ -32,15 +35,13 @@
             return plants;
         }
 
-        static void ChooseUserAction(Plant[] plants, User user, out bool isExit)
+        static void ChooseUserAction(Plant[] plants, User user)
         {
-            isExit = false;
             UserAction action = UserAction.Default;
-
-            while (isExit != true)
+            while (action != UserAction.Exit)
             {
                 view.ShowMenu();
-                switch (view.GetUserAction())
+                switch (action = view.GetUserAction())
                 {
                     case UserAction.Water:
                         Water(ChoosePlant(plants));
@@ -49,10 +50,14 @@
                         TakeFlower(ChoosePlant(plants), user);
                         break;
                     case UserAction.Wait:
-                        isExit = Wait(plants);
+                        if (Wait(plants))
+                            action = UserAction.Exit;
+                        break;
+                    case UserAction.ShowStatus:
+                        ShowStatus(plants);
                         break;
                     case UserAction.Exit:
-                        isExit = true;
+                        action = UserAction.Exit;
                         break;
                     default:
                         view.Alert(viewText.notCorrectInput);
@@ -71,12 +76,19 @@
             return null;
         }
 
+        static public void ShowStatus(Plant[] plants)
+        {
+            foreach(Plant plant in plants)
+            {
+                view.ShowStatus(plant);
+            }
+        }
+
         static public void Water(Plant plant)
         {
             if (plant.isPour == false)
             {
                 plant.isPour = true;
-                plant.counterToGrew++;
                 plant.lifeBar = plant.fullHealth;
                 view.Water(plant);
             }
@@ -122,7 +134,7 @@
                 }
             }
 
-            if (EverybodyDies(plants))
+            if (isEverybodyDead(plants))
                 return true;
             else
                 return false;
@@ -138,14 +150,13 @@
 
         static public void EndGame(Plant[] plants, User user)
         {
-            if (EverybodyDies(plants))
+            if (isEverybodyDead(plants))
                 view.Died();
             else
                 view.Closed();
-            view.ShowScore(user);
         }
 
-        static bool EverybodyDies(Plant[] plants)
+        static bool isEverybodyDead(Plant[] plants)
         {
             int counter = 0;
             foreach (var plant in plants)

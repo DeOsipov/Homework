@@ -1,6 +1,6 @@
 ﻿namespace Main
 {
-    class ConsoleViewText
+    class ViewText
     {
         //alert
         internal string waterNo = "U can\'t water more...";

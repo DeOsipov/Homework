@@ -49,7 +49,7 @@
     <Compile Include="IView.cs" />
     <Compile Include="Control.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ConsoleViewText.cs" />
+    <Compile Include="ViewText.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>

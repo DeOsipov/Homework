@@ -2,13 +2,14 @@
 {
     interface IView
     {
-        void Login(User user);
+        void Login();
         void ShowScore(User user);
         string UserInput();
         void ShowMenu();
         void ShowStartMenu(User user);
         UserAction GetUserAction();
         void ChoosePlant();
+        void ShowStatus(Plant plant);
         void TakeFlower(Plant plant);
         void Water(Plant plant);
         void Wait(Plant plant);

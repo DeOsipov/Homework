@@ -4,19 +4,17 @@ namespace Main
 {
     class ConsoleView : IView
     {
-        Plant plant = new Plant();
-
-        public void Login(User user)
+        public void Login()
         {
             Console.WriteLine("Input your name.");
-            user.name = UserInput();
         }
 
         public string UserInput()
         {
             return Console.ReadLine();
         }
-
+        
+        Plant plant = new Plant();
         public void ShowStartMenu(User user)
         {
             Console.WriteLine(
@@ -33,6 +31,7 @@ namespace Main
                 $"Take the flower type {(int)UserAction.Take} or \"take\"\n" +
                 $"Water the plant type {(int)UserAction.Water} or \"water\"\n" +
                 $"Skip a turn type {(int)UserAction.Wait} or \"wait\"\n" +
+                $"Show plant status info type {(int)UserAction.ShowStatus} or \"show\"\n" +
                 $"U can exit the game by typing {(int)UserAction.Exit} or \"exit\"\n");
         }
 
@@ -50,6 +49,9 @@ namespace Main
                 case "wait":
                     return UserAction.Wait;
                 case "4":
+                case "show":
+                    return UserAction.ShowStatus;
+                case "5":
                 case "exit":
                     return UserAction.Exit;
                 default:
@@ -60,6 +62,22 @@ namespace Main
         public void ChoosePlant()
         {
             Console.WriteLine("Choose a plant");
+        }
+
+        public void ShowStatus(Plant plant)
+        {
+            string lifeStatus = string.Format("Plant {0} is {1}", plant.number, plant.isDead ? "dead" : "alive");
+            if (plant.isDead)
+            {
+                Alert(lifeStatus);
+                return;
+            }
+            Console.WriteLine(lifeStatus);
+
+            string waterStatus = plant.isPour ? "" : "not ";
+            Console.WriteLine($"Plant {plant.number} is {waterStatus}watered.\n" +
+                            $"After {plant.lifeBar} moves plant {plant.number} will died.\n" +
+                            $"After {plant.readyToTake - plant.counterToGrew} moves plant will be ready.\n");
         }
 
         public void Water(Plant plant)
@@ -77,7 +95,7 @@ namespace Main
 
         public void Wait(Plant plant)
         {
-            Console.WriteLine($"Plant will be dried after {plant.lifeBar} moves.\n");
+            Console.WriteLine($"Plant {plant.number} will be dried after {plant.lifeBar} moves.\n");
         }
 
         public void Ready(Plant plant)

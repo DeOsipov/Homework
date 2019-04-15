@@ -6,6 +6,7 @@
         Take,
         Water,
         Wait,
+        ShowStatus,
         Exit
     }
 }
