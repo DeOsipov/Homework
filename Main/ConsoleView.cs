@@ -22,7 +22,7 @@ namespace Main
                 $"Your plant give a flower every {plant.readyToTake} turns.\n" +
                 $"If plant is staing dried more then {plant.lifeBar} turns - it dies.\n" +
                 "Take a biggest bouquet as you can.\n" +
-                "U can do 3 things:\n");
+                "U can do:");
         }
 
         public void ShowMenu()
@@ -72,20 +72,17 @@ namespace Main
                 Alert(lifeStatus);
                 return;
             }
-            Console.WriteLine(lifeStatus);
+            Success(lifeStatus);
 
-            string waterStatus = plant.isPour ? "" : "not ";
-            Console.WriteLine($"Plant {plant.number} is {waterStatus}watered.\n" +
-                            $"After {plant.lifeBar} moves plant {plant.number} will died.\n" +
-                            $"After {plant.readyToTake - plant.counterToGrew} moves plant will be ready.\n");
+            string prefix = plant.isPour ? "" : "not ";
+            string waterStatus = ($"Plant {plant.number} is {prefix}watered.");
+            if (plant.isPour) //create a delegate
+                Success(waterStatus);
+            else                
+                Alert(waterStatus);
+            Console.WriteLine($"After {plant.lifeBar} moves plant {plant.number} will died.\n" +
+                $"After {plant.readyToTake - plant.counterToGrew} moves plant will be ready.\n");
         }
-
-        public void Water(Plant plant)
-        {
-            Console.WriteLine($"U watered the plant.\n" +
-                $"Plant will be dried after {plant.lifeBar} moves.\n" +
-                $"Your flower is starting to grow\n");
-        }        
 
         public void TakeFlower(Plant plant)
         {
@@ -132,11 +129,6 @@ namespace Main
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(message);
             Console.ResetColor();
-        }
-
-        public void Died()
-        {
-            Console.WriteLine("YOU ARE DIED...");
         }
 
         public void Closed()

@@ -8,7 +8,7 @@
         static void Main()
         {
             User user = Login();
-            Plant[] plants = Plants();
+            Plant[] plants = CreatePlantsArray();
 
             view.ShowStartMenu(user);
             ChooseUserAction(plants, user);
@@ -25,7 +25,7 @@
         }
 
         private const int numberOfPlants = 3;
-        static Plant[] Plants()
+        static Plant[] CreatePlantsArray()
         {
             Plant[] plants = new Plant[numberOfPlants];
             for (int i = 0; i < plants.Length; i++)
@@ -85,20 +85,41 @@
             }
         }
 
+        static bool IsNotAvaible(Plant plant)
+        {
+            if (plant == null)
+            {
+                view.Alert(viewText.notCorrectInput);
+                return true;
+            }
+            if (plant.isDead)
+            {
+                view.Alert(viewText.isDead);
+                return true;
+            }
+            return false;
+        }
+
         static public void Water(Plant plant)
         {
+            if (IsNotAvaible(plant))
+                return;
+
             if (plant.isPour == false)
             {
                 plant.isPour = true;
                 plant.lifeBar = plant.fullHealth;
-                view.Water(plant);
+                view.Success(viewText.wateredYes);
             }
             else
-                view.Alert(viewText.waterNo);
+                view.Alert(viewText.wateredNo);
         }
         
         static public void TakeFlower(Plant plant, User user)
         {
+            if (IsNotAvaible(plant))
+                return;
+
             if (plant.isPour = true && plant.counterToGrew >= plant.readyToTake)
             {
                 user.score++;
@@ -111,16 +132,10 @@
                 view.Alert(viewText.notGrowing);
         }        
 
-        static public void Wait(Plant[] plants) //TODO if plant is dead - exclude it from the game and show alert
-        {                                       //make smaler methods
+        static public void Wait(Plant[] plants)
+        {                                       //TODO make smaler methods
             foreach (Plant plant in plants)
             {
-                if (plant.isDead)
-                {
-                    view.Alert(viewText.isDead);
-                    continue;
-                }
-
                 plant.lifeBar--;
                 if (plant.lifeBar <= 0)
                 {
@@ -146,18 +161,10 @@
             }
         }
 
-        static void Pour(Plant plant)
-        {
-            if (plant.isPour == false)
-                plant.isPour = true;
-            else
-                view.Success(viewText.wateredYes);
-        }
-
         static public void EndGame(Plant[] plants, User user)
         {
             if (IsEverybodyDead(plants))
-                view.Died();
+                view.Alert(viewText.youDead);
             else
                 view.Closed();
         }
