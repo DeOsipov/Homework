@@ -10,14 +10,17 @@
         internal string isDead = "Plant is dead.";
         internal string youDead = "Everything in this world is dead, game over...";
         internal string gameNotSaved = "Game is not saved, change name";
-        internal string gameNotLoad = "Game is not saved, change name";
+        internal string gameNotLoad = "Game not load";
+        internal string gameNotDelete = "Game not delete";
         //success - green color
         internal string wateredYes = "Plant have been watered.";
         internal string gameSaved = "Game saved";
         internal string gameLoad = "Game load";
+        internal string gameDelete = "Game deleted";
         //info - white color
         internal string chooseGameToSave = "Input number of slot to save the game, you can save in slots from 1 to 10.";
         internal string chooseGameToLoad = "Input number of slot to load the game, you can load from slots 1 to 10.";
+        internal string chooseGameDelete = "Input number of slot to delete the game.";
     }
 }
 //TODO create methods, which takes VAR and move ALL TEXT here

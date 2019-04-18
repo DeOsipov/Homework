@@ -67,9 +67,9 @@
                 case UserAction.Load:
                     game.Load();
                     break;
-                //case UserAction.Delete:
-                //    game.Delete();
-                //    break;
+                case UserAction.Delete:
+                    game.Delete();
+                    break;
                 case UserAction.Exit:
                     action = UserAction.Exit;
                     break;

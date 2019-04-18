@@ -34,6 +34,7 @@ namespace Main
                 $"Show plant status info type {(int)UserAction.ShowStatus} or \"show\"\n" +
                 $"Save game - {(int)UserAction.Save} or \"save\"\n" +
                 $"Load game - {(int)UserAction.Load} or \"load\"\n" +
+                $"Delete game - {(int)UserAction.Delete} or \"del\"\n" +
                 $"U can exit the game by typing {(int)UserAction.Exit} or \"exit\"\n");
         }
 
@@ -59,9 +60,9 @@ namespace Main
                 case "6":
                 case "load":
                     return UserAction.Load;
-                //case "7":
-                //case "save":
-                //    return UserAction.Delete;
+                case "7":
+                case "del":
+                    return UserAction.Delete;
                 case "8":
                 case "exit":
                     return UserAction.Exit;

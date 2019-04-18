@@ -67,5 +67,23 @@ namespace Main
                     return "save" + number.ToString() + ".json";
             return null;
         }
+
+        internal void Delete()
+        {
+            try
+            {
+                FileDelete();
+                view.Success(viewText.gameDelete);
+            }
+            catch
+            {
+                view.Alert(viewText.gameNotDelete);
+            }
+        }
+
+        void FileDelete()
+        {
+            File.Delete(folderPathCurrent + "/" + FileName(viewText.chooseGameDelete));
+        }
     }
 }
