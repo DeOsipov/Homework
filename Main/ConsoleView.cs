@@ -13,12 +13,12 @@ namespace Main
         {
             return Console.ReadLine();
         }
-        
+
         Plant plant = new Plant();
         public void ShowStartMenu(User user)
         {
             Console.WriteLine(
-                $"{user.name}, you are playing the game \"Flower Lover v 1.0.0\".\n" +                
+                $"{user.name}, you are playing the game \"Flower Lover v 1.0.0\".\n" +
                 $"Your plant give a flower every {plant.readyToTake} turns.\n" +
                 $"If plant is staing dried more then {plant.lifeBar} turns - it dies.\n" +
                 "Take a biggest bouquet as you can.\n" +
@@ -32,6 +32,8 @@ namespace Main
                 $"Water the plant type {(int)UserAction.Water} or \"water\"\n" +
                 $"Skip a turn type {(int)UserAction.Wait} or \"wait\"\n" +
                 $"Show plant status info type {(int)UserAction.ShowStatus} or \"show\"\n" +
+                $"Save game - {(int)UserAction.Save} or \"save\"\n" +
+                $"Load game - {(int)UserAction.Load} or \"load\"\n" +
                 $"U can exit the game by typing {(int)UserAction.Exit} or \"exit\"\n");
         }
 
@@ -52,6 +54,15 @@ namespace Main
                 case "show":
                     return UserAction.ShowStatus;
                 case "5":
+                case "save":
+                    return UserAction.Save;
+                case "6":
+                case "load":
+                    return UserAction.Load;
+                //case "7":
+                //case "save":
+                //    return UserAction.Delete;
+                case "8":
                 case "exit":
                     return UserAction.Exit;
                 default:
@@ -76,23 +87,23 @@ namespace Main
 
             string prefix = plant.isPour ? "" : "not ";
             string waterStatus = ($"Plant {plant.number} is {prefix}watered.");
-            if (plant.isPour) //create a delegate
-                Success(waterStatus);
-            else                
+            if (plant.isPour)
+                Success(waterStatus);//TODO create a delegate
+            else
                 Alert(waterStatus);
-            Console.WriteLine($"After {plant.lifeBar} moves plant {plant.number} will died.\n" +
-                $"After {plant.readyToTake - plant.counterToGrew} moves plant will be ready.\n");
+
+            WillDried(plant);
+            if (plant.counterToGrew >= plant.readyToTake)
+                Ready(plant);//TODO delegate
+            else
+                NotGrowYet(plant);
+            Console.WriteLine($"After {plant.readyToTake - plant.counterToGrew} moves plant will be ready.\n");
         }
 
         public void TakeFlower(Plant plant)
         {
             Console.WriteLine($"U take the flower and increase a bouquet.\n" +
                 $"Plant will be dried after {plant.lifeBar} moves.\n");
-        }
-
-        public void Wait(Plant plant)
-        {
-            Console.WriteLine($"Plant {plant.number} will be dried after {plant.lifeBar} moves.\n");
         }
 
         public void Ready(Plant plant)
@@ -107,7 +118,7 @@ namespace Main
 
         public void WillDried(Plant plant)
         {
-            Console.WriteLine($"Plant will be dried after {plant.lifeBar} moves.\n");
+            Console.WriteLine($"After {plant.lifeBar} moves plant {plant.number} will died.\n");
         }
 
         public void ShowScore(User user)
@@ -129,6 +140,11 @@ namespace Main
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(message);
             Console.ResetColor();
+        }
+
+        public void Info(string message)
+        {
+            Console.WriteLine(message);
         }
 
         public void Closed()

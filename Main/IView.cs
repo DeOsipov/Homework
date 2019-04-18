@@ -11,12 +11,12 @@
         void ChoosePlant();
         void ShowStatus(Plant plant);
         void TakeFlower(Plant plant);
-        void Wait(Plant plant);
         void Ready(Plant plant);
         void NotGrowYet(Plant plant);
         void WillDried(Plant plant);
         void Alert(string message);
         void Success(string message);
+        void Info(string message);
         void Closed();
     }
 }

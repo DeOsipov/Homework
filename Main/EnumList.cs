@@ -7,6 +7,9 @@
         Water,
         Wait,
         ShowStatus,
+        Save,
+        Load,
+        Delete,
         Exit
     }
 }

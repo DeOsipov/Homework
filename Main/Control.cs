@@ -4,6 +4,7 @@
     {
         static IView view = new ConsoleView();
         static ViewText viewText = new ViewText();
+        static Game game = new Game();
 
         static void Main()
         {
@@ -11,7 +12,14 @@
             Plant[] plants = CreatePlantsArray();
 
             view.ShowStartMenu(user);
-            ChooseUserAction(plants, user);
+
+            UserAction action = UserAction.Default;
+            while (action != UserAction.Exit)
+            {
+                view.ShowMenu();
+                ChooseUserAction(plants, user, action);
+                view.ShowScore(user);
+            }
             EndGame(plants, user);
             view.UserInput();//чтоб не закрывалась
         }
@@ -35,36 +43,39 @@
             return plants;
         }
 
-        static void ChooseUserAction(Plant[] plants, User user)
+        static void ChooseUserAction(Plant[] plants, User user, UserAction action)
         {
-            UserAction action = UserAction.Default;
-            while (action != UserAction.Exit)
+            switch (action = view.GetUserAction())
             {
-                view.ShowMenu();
-                switch (action = view.GetUserAction())
-                {
-                    case UserAction.Water:
-                        Water(ChoosePlant(plants));
-                        break;
-                    case UserAction.Take:
-                        TakeFlower(ChoosePlant(plants), user);
-                        break;
-                    case UserAction.Wait:
-                        Wait(plants);
-                        if (IsEverybodyDead(plants))
-                            action = UserAction.Exit;                        
-                        break;
-                    case UserAction.ShowStatus:
-                        ShowStatus(plants);
-                        break;
-                    case UserAction.Exit:
-                        action = UserAction.Exit;
-                        break;
-                    default:
-                        view.Alert(viewText.notCorrectInput);
-                        break;
-                }
-                view.ShowScore(user);
+                case UserAction.Water:
+                    Water(ChoosePlant(plants));
+                    break;
+                case UserAction.Take:
+                    TakeFlower(ChoosePlant(plants), user);
+                    break;
+                case UserAction.Wait:
+                    Wait(plants);
+                    if (IsEverybodyDead(plants))
+                        action = UserAction.Exit;                        
+                    break;
+                case UserAction.ShowStatus:
+                    ShowStatus(plants);
+                    break;
+                case UserAction.Save:
+                    game.Save(user, plants);
+                    break;
+                case UserAction.Load:
+                    game.Load();
+                    break;
+                //case UserAction.Delete:
+                //    game.Delete();
+                //    break;
+                case UserAction.Exit:
+                    action = UserAction.Exit;
+                    break;
+                default:
+                    view.Alert(viewText.notCorrectInput);
+                    break;
             }
         }
         
@@ -80,9 +91,7 @@
         static public void ShowStatus(Plant[] plants)
         {
             foreach(Plant plant in plants)
-            {
                 view.ShowStatus(plant);
-            }
         }
 
         static bool IsNotAvaible(Plant plant)
@@ -98,41 +107,52 @@
                 return true;
             }
             return false;
-        }
+        }        
 
-        static public void Water(Plant plant)
+        static void Water(Plant plant)
         {
             if (IsNotAvaible(plant))
                 return;
 
             if (plant.isPour == false)
-            {
-                plant.isPour = true;
-                plant.lifeBar = plant.fullHealth;
-                view.Success(viewText.wateredYes);
-            }
+                WaterSuccess(plant);
             else
                 view.Alert(viewText.wateredNo);
         }
+
+        static void WaterSuccess(Plant plant)
+        {
+            plant.isPour = true;
+            plant.lifeBar = plant.fullHealth;
+            view.Success(viewText.wateredYes);
+        }
         
-        static public void TakeFlower(Plant plant, User user)
+        static void TakeFlower(Plant plant, User user)
         {
             if (IsNotAvaible(plant))
                 return;
 
-            if (plant.isPour = true && plant.counterToGrew >= plant.readyToTake)
-            {
-                user.score++;
-                plant.counterToGrew = 0;
-                view.TakeFlower(plant);
-            }
-            else if (plant.isPour == false)
+            if (plant.isPour == false)
                 view.Alert(viewText.notWatered);
+            else if (plant.isPour = true && IsReadyToTake(plant))
+                TakeSuccess(user, plant);
             else
                 view.Alert(viewText.notGrowing);
-        }        
+        }
 
-        static public void Wait(Plant[] plants)
+        static bool IsReadyToTake(Plant plant)
+        {
+            return plant.counterToGrew >= plant.readyToTake;
+        }
+
+        static void TakeSuccess(User user, Plant plant)
+        {
+            user.score++;
+            plant.counterToGrew = 0;
+            view.TakeFlower(plant);
+        }
+
+        static void Wait(Plant[] plants)
         {                                       //TODO make smaler methods
             foreach (Plant plant in plants)
             {
@@ -161,7 +181,7 @@
             }
         }
 
-        static public void EndGame(Plant[] plants, User user)
+        static void EndGame(Plant[] plants, User user)
         {
             if (IsEverybodyDead(plants))
                 view.Alert(viewText.youDead);

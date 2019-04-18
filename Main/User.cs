@@ -1,5 +1,8 @@
-﻿namespace Main
+﻿using System;
+
+namespace Main
 {
+    [Serializable]
     class User
     {
         internal string name;
