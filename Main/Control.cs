@@ -5,20 +5,20 @@ namespace Main
     class Control
     {
         static IView view = new ConsoleView();
-        static ViewText viewText = new ViewText();
+        static TextValue textValue = new TextValue();
         static Game game = new Game();
 
         static void Main()
         {
             User user = Login();
             Plant[] plants = CreatePlantsArray();
-            view.Info(viewText.ShowStartMenu(user));
+            view.Info(textValue.ShowStartMenu(user));
             UserAction action = UserAction.Default;
             while (action != UserAction.Exit)
             {
-                view.Info(viewText.showMenu);
+                view.Info(textValue.showMenu);
                 ChooseUserAction(plants, user, action);
-                view.Attention(viewText.ShowScore(user));
+                view.Attention(textValue.ShowScore(user));
             }
             EndGame(plants, user);
             view.UserInput();
@@ -27,7 +27,7 @@ namespace Main
         static User Login()
         {
             User user = new User();
-            view.Info(viewText.login);
+            view.Info(textValue.login);
             user.name = view.UserInput();
             return user;
         }
@@ -36,11 +36,12 @@ namespace Main
         static Plant[] CreatePlantsArray()
         {            
             Plant[] plants = new Plant[numberOfPlants];
-            Random random = new Random();
             for (int i = 0; i < plants.Length; i++)
             {
-                plants[i] = new Plant { number = i + 1};
-                plants[i].lifeBar = plants[i].FullHealth; //TODO сократить
+                Plant actualPlant = new Plant();
+                actualPlant.number = i + 1;
+                actualPlant.lifeBar = actualPlant.FullHealth;
+                plants[i] = actualPlant;
             }
             return plants;
         }
@@ -76,14 +77,14 @@ namespace Main
                     action = UserAction.Exit;
                     break;
                 default:
-                    view.Alert(viewText.notCorrectInput);
+                    view.Alert(textValue.notCorrectInput);
                     break;
             }
         }
         
         static public Plant ChoosePlant(Plant[] plants)
         {
-            view.Info(viewText.choosePlant);
+            view.Info(textValue.choosePlant);
             bool success = int.TryParse(view.UserInput(), out int number);
             if (success && number > 0 && number <= plants.Length)
                 return plants[number - 1];
@@ -100,12 +101,12 @@ namespace Main
         {
             if (plant == null)
             {
-                view.Alert(viewText.notCorrectInput);
+                view.Alert(textValue.notCorrectInput);
                 return true;
             }
             if (plant.isDead)
             {
-                view.Alert(viewText.isDead);
+                view.Alert(textValue.isDead);
                 return true;
             }
             return false;
@@ -119,14 +120,14 @@ namespace Main
             if (plant.isPour == false)
                 WaterSuccess(plant);
             else
-                view.Alert(viewText.wateredNo);
+                view.Alert(textValue.wateredNo);
         }
 
         static void WaterSuccess(Plant plant)
         {
             plant.isPour = true;
             plant.lifeBar = plant.FullHealth;
-            view.Success(viewText.wateredYes);
+            view.Success(textValue.wateredYes);
         }
         
         static void TakeFlower(Plant plant, User user)
@@ -135,11 +136,11 @@ namespace Main
                 return;
 
             if (plant.isPour == false)
-                view.Alert(viewText.notWatered);
+                view.Alert(textValue.notWatered);
             else if (plant.isPour = true && IsReadyToTake(plant))
                 TakeSuccess(user, plant);
             else
-                view.Alert(viewText.notGrowing);
+                view.Alert(textValue.notGrowing);
         }
 
         static bool IsReadyToTake(Plant plant)
@@ -151,7 +152,7 @@ namespace Main
         {
             user.score++;
             plant.counterToGrew = 0;
-            view.Info(viewText.TakeFlower(plant));
+            view.Info(textValue.TakeFlower(plant));
         }
 
         static void Wait(Plant[] plants)
@@ -183,24 +184,24 @@ namespace Main
             else
             {
                 plant.counterToGrew = 0;
-                view.Info(viewText.WillDry(plant));
+                view.Info(textValue.WillDry(plant));
             }
         }
 
         static void PlantGrowStatus(Plant plant)
         {
             if (plant.counterToGrew >= plant.ReadyToTake)
-                view.Info(viewText.Ready(plant));
+                view.Info(textValue.Ready(plant));
             else
-                view.Info(viewText.NotGrowYet(plant));
+                view.Info(textValue.NotGrowYet(plant));
         }
         
         static void EndGame(Plant[] plants, User user)
         {
             if (IsEverybodyDead(plants))
-                view.Alert(viewText.youDead);
+                view.Alert(textValue.youDead);
             else
-                view.Info(viewText.Closed());
+                view.Info(textValue.Closed());
         }
 
         static bool IsEverybodyDead(Plant[] plants)

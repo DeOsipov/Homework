@@ -1,6 +1,6 @@
 ﻿namespace Main
 {
-    class ViewText
+    class TextValue
     {
         internal string notCorrectInput = "Input right action";
         internal string wateredNo = "U can\'t water more...";
@@ -67,12 +67,12 @@
             return $"{user.name}, you score is {user.score}";
         }
 
-        public string LifeStatus(Plant plant)
+        internal string LifeStatus(Plant plant)
         {
             return string.Format("Plant {0} is {1}", plant.number, plant.isDead ? "dead" : "alive");
         }
 
-        public string WaterStatus(Plant plant)
+        internal string WaterStatus(Plant plant)
         {
             string prefix = plant.isPour ? "" : "not ";
             return $"Plant {plant.number} is {prefix}watered.";

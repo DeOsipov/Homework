@@ -7,11 +7,11 @@ namespace Main
     class Game
     {
         IView view = new ConsoleView();
-        static ViewText viewText = new ViewText();
+        static TextValue viewText = new TextValue();
 
         DataContractJsonSerializer jsonFormPlants = new DataContractJsonSerializer(typeof(Plant[]));
         DataContractJsonSerializer jsonFormUser = new DataContractJsonSerializer(typeof(User));
-        public static string folderPathCurrent = @"C:\Users\Gala\Desktop\Homework\Main\savedGames"; //Environment.CurrentDirectory; // main problem TODO
+        internal static string folderPathCurrent = @"C:\Users\Gala\Desktop\Homework\Main\savedGames"; //Environment.CurrentDirectory; // main problem TODO
 
         internal void Save(User user, Plant[] plants)
         {
@@ -81,15 +81,17 @@ namespace Main
             view.Info(message);
             bool correctUserInput = int.TryParse(view.UserInput(), out int number);
 
+            int maxSlotsOfGame = 10;
+
             if (correctUserInput)
-                if (number > 0 && number <= 10)
+                if (number > 0 && number <= maxSlotsOfGame)
                     return folderPathCurrent + @"\save" + number.ToString() + ".json";
             return null;
         }
 
         void FindAndShowNotes()
         {
-            string[] notes = Directory.GetFiles(folderPathCurrent, "*.txt");
+            string[] notes = Directory.GetFiles(folderPathCurrent, "*.json");
             if (notes.Length == 0)
                 view.Info(viewText.emptyFolder);
 

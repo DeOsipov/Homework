@@ -42,7 +42,7 @@ namespace Main
             }
         }
 
-        ViewText viewText = new ViewText();
+        TextValue viewText = new TextValue();
         public void ShowStatus(Plant plant)
         {
             if (plant.isDead)
@@ -63,26 +63,28 @@ namespace Main
 
         public void Alert(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
-            Console.ResetColor();
+            ShowMessage(message, "red");
         }
 
         public void Success(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(message);
-            Console.ResetColor();
+            ShowMessage(message, "green");
         }
 
         public void Info(string message)
         {
-            Console.WriteLine(message);
+            ShowMessage(message, "white");
         }
 
         public void Attention(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            ShowMessage(message, "yellow");
+        }
+
+        void ShowMessage(string message, string color)
+        {
+            ConsoleColor consoleColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), color, true);
+            Console.ForegroundColor = consoleColor;
             Console.WriteLine(message);
             Console.ResetColor();
         }
